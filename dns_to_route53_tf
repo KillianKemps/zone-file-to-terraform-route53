@@ -29,7 +29,20 @@ def usage
 end
 
 usage if ARGV[0] =~ /help/ || ARGV[0].nil?
-domain = ARGV[0]
+domain = ARGV.shift
+until ARGV.empty?
+  arg = ARGV.shift
+  case arg
+  when '--import'
+    import = true
+  when '--gandi'
+    provider = 'gandi'
+  else
+    STDERR.puts "Argument \"#{arg}\" unknown !"
+    usage
+  end
+end
+import_token = ENV['TF_CONVERTER_DOMAIN_ID'] if import
 terraform_zone_id = domain.tr('.', '-')
 
 puts <<-EOF.gsub(/^\s{2}/, '')
@@ -92,6 +105,10 @@ loop do
           values  = [#{value}]
         }\n
       EOF
+
+      if import and provider == 'gandi'
+        `terraform import gandi_zonerecord.#{id}-#{type} #{import_token}/#{name}/#{type}`
+      end
     end
   end
 
