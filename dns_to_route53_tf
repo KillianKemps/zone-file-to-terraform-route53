@@ -83,7 +83,7 @@ loop do
 
   records.each do |name, type_h|
     type_h.each do |type, record|
-      name = '' if name == '@'
+      name = '' if name == '@' unless provider == 'gandi'
       id = "#{name}-#{terraform_zone_id}".tr('._', '-')
       id = terraform_zone_id if name.empty?
       ttl = record[:ttl]
