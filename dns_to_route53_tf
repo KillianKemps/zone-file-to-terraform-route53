@@ -53,7 +53,7 @@ puts <<-EOF.gsub(/^\s{2}/, '')
   }\n
   resource "gandi_domainattachment" "#{terraform_zone_id}" {
     domain = "#{domain}"
-    zone = "${gandi_zone.#{terraform_zone_id}.id}"
+    zone = gandi_zone.#{terraform_zone_id}.id
   }\n
 EOF
 
@@ -100,7 +100,7 @@ loop do
 
       puts <<-EOF.gsub(/^\s{8}/, '')
         resource "gandi_zonerecord" "#{id}-#{type}" {
-          zone    = "${gandi_zone.#{terraform_zone_id}.id}"
+          zone    = gandi_zone.#{terraform_zone_id}.id
           name    = "#{name}"
           type    = "#{type}"
           ttl     = "#{ttl}"
